@@ -12,7 +12,6 @@ def set_current_graph_paths():
 
 
 def get_test_path():
-    print(graph_data.test_path[global_game_data.current_graph_index])
     return graph_data.test_path[global_game_data.current_graph_index]
 
 
@@ -24,13 +23,43 @@ def get_random_path():
     #graph_data[a][b][1] = adjacency list of point b in graph a
     #randomly generate a based on the length of graph_data then randomly generate b based on the length of graph_data[a]
     #then randomly generated a new point and check if its in the adjacency list 
+
     a = global_game_data.current_graph_index
-    b = random.randint((len(graph_data.graph_data[a])-1))
-    print(global_game_data.current_graph_index)
+    currentNode = 0
+    end = len(graph_data.graph_data[a])-1
+    print("END")
+    print(end)
+    print("TARGET")
+    print(global_game_data.target_node[a])
 
-    print(graph_data.graph_data[a][b][1])
-    return graph_data.graph_data[a][b][1]
+    #i got it to work for hitting the target just not hitting the end
+    path = startToTarget(a,currentNode,global_game_data.target_node[a])
+    currentNode = global_game_data.target_node[a]
+    result = startToTarget(a,currentNode,end)
+    for i in range(len(result)):
+        path.append(result[i])
+    return path
+#b is 0 or the current index if you're keeping track of that
+#create a function that takes beginning and target 
+#while current index != target keep randomizing and go to the adjacency list of the current node
 
+def startToTarget(currentGraph, currentNode, targetNode):
+    path = [currentNode]
+    while(currentNode != targetNode):
+        print("current node")
+        print(currentNode)
+        print("target node")
+        print(targetNode)
+        adjacencyList = graph_data.graph_data[currentGraph][currentNode][1]
+        currentNode =adjacencyList[random.randint(0,(len(adjacencyList)))]
+        path.append(currentNode)
+        print("current path")
+        print(path)
+        if(currentNode == targetNode):
+            print("SHOULD BE DONE")
+    print("final path")
+    print(path)
+    return path
 
 def get_dfs_path():
     return [1,2]
