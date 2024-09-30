@@ -27,7 +27,6 @@ def get_random_path():
     result = startToTarget(a,currentNode,end)
     for i in range(len(result)):
         path.append(result[i])
-    
     return path
 #b is 0 or the current index if you're keeping track of that
 #create a function that takes beginning and target 
@@ -42,6 +41,7 @@ def startToTarget(currentGraph, currentNode, targetNode):
         currentNode =adjacencyList[random.randint(0,(len(adjacencyList)))]
         path.append(currentNode)
     assert len(path)>0,"No new nodes were added to the path" 
+    assert path[len(path)-1]==targetNode, "Did not end on the target node"
     return path
 
 def get_dfs_path():
