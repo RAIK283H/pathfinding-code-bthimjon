@@ -11,7 +11,7 @@ class Scoreboard:
     player_traveled_display = []
     player_excess_distance_display = []
     player_path_display = []
-    player_node_frequency_count = []
+    player_traversal_time = []
 
     def __init__(self, batch, group):
         self.batch = batch
@@ -54,13 +54,13 @@ class Scoreboard:
             self.player_path_display.append(
                 (path_label, player))
             
-            node_frequency_count_label = pyglet.text.Label("Node Visit Frequency:",
+            traversal_time_label = pyglet.text.Label("Traversal Time:",
                                                         x=0,
                                                         y=0,
                                                         font_name='Arial',
                                                         font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
-            self.player_node_frequency_count.append(
-                (node_frequency_count_label, player))
+            self.player_traversal_time.append(
+                (traversal_time_label, player))
 
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
@@ -77,7 +77,7 @@ class Scoreboard:
         for index, (display_element, player) in enumerate(self.player_path_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 5 - self.stat_height * (index * self.number_of_stats)
-        for index, (display_element, player) in enumerate(self.player_node_frequency_count):
+        for index, (display_element, player) in enumerate(self.player_traversal_time):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 6 - self.stat_height * (index * self.number_of_stats)
 

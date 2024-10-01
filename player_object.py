@@ -4,6 +4,7 @@ import global_game_data
 import relative_display_functions
 import graph_data
 import config_data
+import time
 
 
 class Player:
@@ -18,12 +19,16 @@ class Player:
         self.sprite = pyglet.sprite.Sprite(img=self.player_image, x=0, y=0, batch=batch, group=group)
         self.player_config_data = player_config_data
         self.distance_traveled = 0
+        self.traversal_time = 0
+        self.start_time = 0
+        self.end_time = 0
 
     def update_location(self, x, y):
         self.sprite.update(relative_display_functions.get_relative_graph_x(x) - self.sprite.width / 2,
                            relative_display_functions.get_relative_graph_y(y) - self.sprite.height / 2)
 
     def reset_player(self):
+
         self.current_objective = 0
         self.absolute_x = graph_data.graph_data[global_game_data.current_graph_index][0][0][0]
         self.absolute_y = graph_data.graph_data[global_game_data.current_graph_index][0][0][1]
@@ -48,6 +53,10 @@ class Player:
 
         # Move player under normal circumstances
         if self.current_objective >= 0 and global_game_data.current_player_index == self.player_index:
+            if self.start_time == 0:
+                self.start_time = time.time()
+                print("START")
+                print(self.start_time)
             target_x = graph_data.graph_data[global_game_data.current_graph_index][
                 global_game_data.graph_paths[self.player_index][self.current_objective]][0][0]
             target_y = graph_data.graph_data[global_game_data.current_graph_index][
@@ -75,7 +84,12 @@ class Player:
             # Go to next object when target is reached
             if self.absolute_x == target_x and self.absolute_y == target_y:
                 self.current_objective += 1
-
+                self.end_time = time.time()
+                self.traversal_time = self.end_time - self.start_time
+                self.start_time = 0
+    
         self.distance_traveled = self.distance_traveled + math.sqrt(math.pow(last_absolute_x-self.absolute_x, 2) + math.pow(last_absolute_y-self.absolute_y, 2))
         self.sprite.visible = (global_game_data.current_player_index == self.player_index)
         self.update_location(self.absolute_x, self.absolute_y)
+        
+    
