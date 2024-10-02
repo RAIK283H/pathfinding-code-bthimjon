@@ -54,7 +54,7 @@ class Scoreboard:
             self.player_path_display.append(
                 (path_label, player))
             
-            traversal_time_label = pyglet.text.Label("Traversal Time:",
+            traversal_time_label = pyglet.text.Label("Time to Node:",
                                                         x=0,
                                                         y=0,
                                                         font_name='Arial',
@@ -112,7 +112,7 @@ class Scoreboard:
         for display_element, player_configuration_info in self.player_traversal_time:
             for player_object in global_game_data.player_objects:
                 if player_object.player_config_data == player_configuration_info:
-                    display_element.text = "Traversal Time: " + str("%.3f" % player_object.traversal_time)
+                    display_element.text = "Time to Node: " + str("%.3f" % player_object.traversal_time)
 
     def update_scoreboard(self):
         self.update_elements_locations()

@@ -91,6 +91,7 @@ def change_graph():
     global_game_data.current_player_index = 0
     graph.set_up_graph()
     pathing.set_current_graph_paths()
+    player_object.traversal_time=0
 
 
 if __name__ == '__main__':
