@@ -55,8 +55,6 @@ class Player:
         if self.current_objective >= 0 and global_game_data.current_player_index == self.player_index:
             if self.start_time == 0:
                 self.start_time = time.time()
-                print("START")
-                print(self.start_time)
             target_x = graph_data.graph_data[global_game_data.current_graph_index][
                 global_game_data.graph_paths[self.player_index][self.current_objective]][0][0]
             target_y = graph_data.graph_data[global_game_data.current_graph_index][

@@ -108,8 +108,15 @@ class Scoreboard:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
 
+    def update_traversal_time(self):
+        for display_element, player_configuration_info in self.player_traversal_time:
+            for player_object in global_game_data.player_objects:
+                if player_object.player_config_data == player_configuration_info:
+                    display_element.text = "Traversal Time: " + str("%.3f" % player_object.traversal_time)
+
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
         self.update_distance_to_exit()
         self.update_distance_traveled()
+        self.update_traversal_time()
