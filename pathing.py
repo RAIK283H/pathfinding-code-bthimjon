@@ -24,11 +24,14 @@ def get_random_path():
 
     #create a path using the random path calculated to the target node
     path = startToTarget(a,currentNode,global_game_data.target_node[a])
-    assert len(path)>0,"Did not successfully hit the target node"
+    assert len(path)>0,"Did not successfully add to the path"
+    assert path[len(path)-1]== global_game_data.target_node[a], "Did not successfully hit the target node"
     #sets the current node equal to the target node(where the path ended)
     currentNode = global_game_data.target_node[a]
     #gets the remaining path from the target to the end node and append to the path
     result = startToTarget(a,currentNode,end)
+    assert len(result)>0,"Did not successfully add to the path"
+    assert result[len(result)-1]== end, "Did not successfully hit the target node"
     for i in range(len(result)):
         path.append(result[i])
     return path
