@@ -32,7 +32,7 @@ def get_random_path():
     result = startToTarget(a,currentNode,end)
     assert len(result)>0,"Did not successfully add to the path"
     assert result[len(result)-1]== end, "Did not successfully hit the target node"
-    for i in range(len(result)):
+    for i in range(1,len(result)):
         path.append(result[i])
     return path
 
@@ -51,13 +51,72 @@ def startToTarget(currentGraph, currentNode, targetNode):
     assert path[len(path)-1]==targetNode, "Did not end on the target node"
     return path
 
+    
 def get_dfs_path():
-    return [1,2]
+  a = global_game_data.current_graph_index
+  end = len(graph_data.graph_data[a])-1
+  path = dfsToTarget(a, 0, global_game_data.target_node[a])
+  result = dfsToTarget(a, global_game_data.target_node[a], end)
+  for i in range(1,len(result)):
+        path.append(result[i])
+  return path
 
+def dfsToTarget(graph, currentNode, targetNode, visited=None, path=None):
+    if visited is None:
+        visited = set()
+    if path is None:
+        path = []
+    
+    visited.add(currentNode)
+    path.append(currentNode)
+    
+    # Check if the current node is the target node
+    if currentNode == targetNode:
+        return path  # Return the path to the target node
+    
+    # Visit all the neighbors
+    for neighbor in graph_data.graph_data[graph][currentNode][1]:
+        if neighbor not in visited:
+            result = dfsToTarget(graph, neighbor, targetNode, visited, path)
+            if result:  # If target is found return all the nodes to the path
+                return result
+    
+    # If target not found in this path backtrack
+    path.pop()
+    return None
 
 def get_bfs_path():
-    return [1,2]
+    a = global_game_data.current_graph_index
+    end = len(graph_data.graph_data[a])-1
+    path = bfsToTarget(a, 0, global_game_data.target_node[a])
+    result = bfsToTarget(a, global_game_data.target_node[a], end)
+    for i in range(1,len(result)):
+        path.append(result[i])
+    return path
 
+def bfsToTarget(graph, currentNode, targetNode):
+    # Queue to store (currentNode, pathToCurrentNode)
+    queue = [(currentNode, [currentNode])]
+    visited = set()
+    
+    while queue:
+        currentNode, path = queue.pop(0)
+        
+        # If target node is found, return the path
+        if currentNode == targetNode:
+            return path
+        
+        # If node is not visited, explore its neighbors
+        if currentNode not in visited:
+            visited.add(currentNode)
+            
+            # Explore all the neighbors of currentNode
+            for neighbor in graph_data.graph_data[graph][currentNode][1]:
+                if neighbor not in visited:
+                    queue.append((neighbor, path + [neighbor]))
+    
+    # If target node is not found, return None
+    return None
 
 def get_dijkstra_path():
     return [1,2]
