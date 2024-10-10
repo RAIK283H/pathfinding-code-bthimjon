@@ -30,5 +30,17 @@ class TestPathFinding(unittest.TestCase):
         path = pathing.startToTarget(0,0,end)
         result = path[len(path)-1]
         self.assertEqual(end,result)
+
+    def test_DFSToTarget(self):
+        end = len(graph_data.graph_data[0])-1
+        path = pathing.dfsToTarget(0,0,end)
+        result = path[len(path)-1]
+        self.assertEqual(end,result)
+
+    def test_BFSToTarget(self):
+        end = len(graph_data.graph_data[0])-1
+        path = pathing.bfsToTarget(0,0,end)
+        result = path[len(path)-1]
+        self.assertEqual(end,result)
 if __name__ == '__main__':
     unittest.main()

@@ -25,40 +25,62 @@ def get_random_path():
     #create a path using the random path calculated to the target node
     path = startToTarget(a,currentNode,global_game_data.target_node[a])
     assert len(path)>0,"Did not successfully add to the path"
-    assert path[len(path)-1]== global_game_data.target_node[a], "Did not successfully hit the target node"
+    assert global_game_data.target_node[a] in path, "The path does not include the target node"
+
     #sets the current node equal to the target node(where the path ended)
     currentNode = global_game_data.target_node[a]
+
     #gets the remaining path from the target to the end node and append to the path
     result = startToTarget(a,currentNode,end)
+
     assert len(result)>0,"Did not successfully add to the path"
     assert result[len(result)-1]== end, "Did not successfully hit the target node"
+
     for i in range(1,len(result)):
         path.append(result[i])
+
+    assert end in path, "The path does not include the exit node"
+
+    for i in range (len(path)-1):
+      assert path[i+1] in (graph_data.graph_data[a][path[i]][1]), "The path isn't valid"
     return path
 
 #takes in the current graph index, the starting node, and the target end node
 def startToTarget(currentGraph, currentNode, targetNode):
     assert targetNode>-1,"The target node is not configured properly"
     assert currentNode>-1,"The target node is not configured properly"
+
     #starts an array for the path with the beginning node
     path = [currentNode]
+
     #continues to choose a random node until it is the target node
     while(currentNode != targetNode):
         adjacencyList = graph_data.graph_data[currentGraph][currentNode][1]
         currentNode =adjacencyList[random.randint(0,(len(adjacencyList)))]
         path.append(currentNode)
+
     assert len(path)>0,"No new nodes were added to the path" 
     assert path[len(path)-1]==targetNode, "Did not end on the target node"
     return path
 
-    
 def get_dfs_path():
+  #sets the index and end node
   a = global_game_data.current_graph_index
   end = len(graph_data.graph_data[a])-1
+
+#gets the path to the target node and checks that the path includes the target node
   path = dfsToTarget(a, 0, global_game_data.target_node[a])
+  assert global_game_data.target_node[a] in path, "The path does not include the target node"
+
+#gets the path to the end node and checks that it is in the path
   result = dfsToTarget(a, global_game_data.target_node[a], end)
   for i in range(1,len(result)):
         path.append(result[i])
+  assert end in path, "The path does not include the exit node"
+
+#checks that all nodes in the path are connected in the adjacency list
+  for i in range (len(path)-1):
+      assert path[i+1] in (graph_data.graph_data[a][path[i]][1]), "The path isn't valid"
   return path
 
 def dfsToTarget(graph, currentNode, targetNode, visited=None, path=None):
@@ -70,52 +92,62 @@ def dfsToTarget(graph, currentNode, targetNode, visited=None, path=None):
     visited.add(currentNode)
     path.append(currentNode)
     
-    # Check if the current node is the target node
+    #checks if the current node is the target node
     if currentNode == targetNode:
-        return path  # Return the path to the target node
+        return path  # return the path to the target node
     
-    # Visit all the neighbors
+    #visits all the neighbors
     for neighbor in graph_data.graph_data[graph][currentNode][1]:
         if neighbor not in visited:
             result = dfsToTarget(graph, neighbor, targetNode, visited, path)
-            if result:  # If target is found return all the nodes to the path
+            if result:  #if target is found return all the nodes to the path
                 return result
     
-    # If target not found in this path backtrack
+    #if target not found in this path backtrack
     path.pop()
     return None
 
 def get_bfs_path():
+    #sets the graph index and end node
     a = global_game_data.current_graph_index
     end = len(graph_data.graph_data[a])-1
+
+    #gets the path to the target node and checks if the target is in the path
     path = bfsToTarget(a, 0, global_game_data.target_node[a])
+    assert global_game_data.target_node[a] in path, "The path does not include the target node"
+
+#gets the path to the end node and checks
     result = bfsToTarget(a, global_game_data.target_node[a], end)
     for i in range(1,len(result)):
         path.append(result[i])
+    assert end in path, "The path does not include the exit node"
+
+#checks that all the nodes in the path are connected
+    for i in range (len(path)-1):
+      assert path[i+1] in (graph_data.graph_data[a][path[i]][1]), "The path isn't valid"
     return path
 
 def bfsToTarget(graph, currentNode, targetNode):
-    # Queue to store (currentNode, pathToCurrentNode)
     queue = [(currentNode, [currentNode])]
     visited = set()
     
     while queue:
         currentNode, path = queue.pop(0)
         
-        # If target node is found, return the path
+        #if target node is found, return the path
         if currentNode == targetNode:
             return path
         
-        # If node is not visited, explore its neighbors
+        #if node is not visited, explore its neighbors
         if currentNode not in visited:
             visited.add(currentNode)
             
-            # Explore all the neighbors of currentNode
+            #go to all the neighbors of the current node
             for neighbor in graph_data.graph_data[graph][currentNode][1]:
                 if neighbor not in visited:
                     queue.append((neighbor, path + [neighbor]))
     
-    # If target node is not found, return None
+    #if target node is not found
     return None
 
 def get_dijkstra_path():
