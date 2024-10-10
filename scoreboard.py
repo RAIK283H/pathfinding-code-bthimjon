@@ -64,7 +64,7 @@ class Scoreboard:
             self.player_traversal_time.append(
                 (traversal_time_label, player))
             self.winnerDistance = 100000
-            self.winner = "Random"
+            self.winner = 0
 
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
@@ -124,14 +124,25 @@ class Scoreboard:
     def update_winner(self):
         for display_element, player_configuration_info in self.player_traversal_time:
             for player_object in global_game_data.player_objects:
-                if player_object.player_config_data == player_configuration_info:
-                    print(self.winnerDistance)
-                    if player_object.distance_traveled < self.winnerDistance:
-                        # Update the winner's distance and name
-                        self.winnerDistance = player_object.distance_traveled
-                        self.winner = config_data.player_data[1]
-                        self.winner_label.text = f'Winning Player: {self.winner}'
-                        print(f"New Winner: {self.winner} with Distance: {player_object.distance_traveled}")
+                if player_object.distance_traveled < self.winnerDistance and player_object.distance_traveled !=0:
+                    self.winnerDistance = player_object.distance_traveled
+                    self.winner = player_object.player_index
+                    print("WINNER")
+                    print(player_object.distance_traveled)
+                    print(player_object.player_index)
+
+                    if (self.winner == 0):
+                        self.winner_text = "Test"
+                    elif (self.winner ==1):
+                        self.winner_text = "Random"
+                    elif (self.winner ==2):
+                        self.winner_text = "DFS"
+                    elif (self.winner ==3):
+                        self.winner_text = "BFS"
+                    self.winner_label.text = f'Winning Player: {self.winner_text}'
+        self.winner_text =""
+        self.winner =0
+        self.winnerDistance = 1000000000
 
     def update_scoreboard(self):
         self.update_elements_locations()
