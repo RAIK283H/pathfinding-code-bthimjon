@@ -124,7 +124,7 @@ class Scoreboard:
     def update_winner(self):
         for display_element, player_configuration_info in self.player_traversal_time:
             for player_object in global_game_data.player_objects:
-                if player_object.distance_traveled < self.winnerDistance and player_object.distance_traveled !=0:
+                if (player_object.distance_traveled < self.winnerDistance) and (player_object.distance_traveled !=0) and (global_game_data.target_node[global_game_data.current_graph_index] in global_game_data.graph_paths[player_object.player_index]):
                     self.winnerDistance = player_object.distance_traveled
                     self.winner = player_object.player_index
                     if (self.winner == 0):
