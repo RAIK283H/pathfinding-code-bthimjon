@@ -127,10 +127,6 @@ class Scoreboard:
                 if player_object.distance_traveled < self.winnerDistance and player_object.distance_traveled !=0:
                     self.winnerDistance = player_object.distance_traveled
                     self.winner = player_object.player_index
-                    print("WINNER")
-                    print(player_object.distance_traveled)
-                    print(player_object.player_index)
-
                     if (self.winner == 0):
                         self.winner_text = "Test"
                     elif (self.winner ==1):
