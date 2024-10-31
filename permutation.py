@@ -2,48 +2,39 @@ from itertools import permutations
 import global_game_data
 import graph_data
 
-def is_valid_cycle(permutation, adj_list, graph_index):
-    n = len(permutation)
-    for i in range(n):
-        # Current and next node in the cycle
-        current_node = permutation[i]
-        next_node = permutation[(i + 1) % n]
+def sjt_permutation():
+    elements = range(1,len(graph_data.graph_data[global_game_data.current_graph_index]))
+    print("Elements")
+    print(list(elements))
+    return list(elements)
+
+def is_valid_hami_cycle(permutation):
+    cycle =  cycle = [0] + list(permutation) + [n]
+    print(cycle)
+    for i in range(len(cycle)-1):
+        node = cycle[i]
+        next_node = cycle[i + 1]
         
-        # Check if there’s an edge from current_node to next_node in the specified graph
-        if next_node not in adj_list[graph_index][current_node]:
-            return False
-    return True
+        adj_nodes = graph_data.graph_data[global_game_data.current_graph_index][node][1]
+    
+        if next_node not in adj_nodes:
+            return False 
+    return True  
 
-def find_hamiltonian_cycles(adj_list, graph_index):
-    # Get all vertices in the graph
-    vertices = range(len(graph_data.graph_data[graph_index]))
-    hamiltonian_cycles = []
+def find_hami_cycles():
+    index = global_game_data.current_graph_index
+    end = len(graph_data.graph_data[index]) - 1
+    valid_cycles = []
 
-    # Generate all permutations of vertices
-    for perm in permutations(vertices):
-        # Check if the permutation forms a valid Hamiltonian cycle in the specified graph
-        if is_valid_cycle(perm, adj_list, graph_index):
-            hamiltonian_cycles.append(perm)
+    for perm in sjt_permutation():
+        if is_valid_hami_cycle(perm, end):
+            print("this should work")
+            valid_cycles.append([0] + list(perm) + [end])
 
-    return hamiltonian_cycles
-
-
-def makeAdjList(graph_index):
-    adj_list =[]
-    for i in range(len(graph_data.graph_data[graph_index])):
-        adj_list.append([]) 
-    for i in range (len(graph_data.graph_data[graph_index])):
-        adj_list[graph_index].append(graph_data.graph_data[graph_index][i][1])
-    print(adj_list)
-    return adj_list
-         
-
-adj_list = makeAdjList(global_game_data.current_graph_index)
-cycles = find_hamiltonian_cycles(adj_list, global_game_data.current_graph_index)
-if cycles:
-    for cycle in cycles:
-        print("Hamiltonian Cycle:", cycle)
-else:
-    print("No Hamiltonian cycle found")
-
-
+    if valid_cycles:
+        for cycle in valid_cycles:
+            print("Hamiltonian Cycle:", cycle)
+        return valid_cycles
+    else:
+        print("No valid Hamiltonian cycle exists")
+        return -1
