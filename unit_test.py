@@ -2,6 +2,8 @@ import math
 import unittest
 import graph_data
 import pathing
+import permutation
+from itertools import permutations
 
 
 class TestPathFinding(unittest.TestCase):
@@ -42,5 +44,25 @@ class TestPathFinding(unittest.TestCase):
         path = pathing.bfsToTarget(0,0,end)
         result = path[len(path)-1]
         self.assertEqual(end,result)
+
+    def test_isValidHami_true(self):
+        test = [1,2,3]
+        result = permutation.is_valid_hami_cycle(test,4,9)
+        self.assertTrue(result)
+
+    def test_isValidHami_false(self):
+        test = [0,1,2,3]
+        result = permutation.is_valid_hami_cycle(test,4,9)
+        self.assertFalse(result)
+
+    def test_isValidHami_trueGraph0(self):
+        test = [1]
+        result = permutation.is_valid_hami_cycle(test,2,0)
+        self.assertTrue(result)
+
+    def test_isValidHami_noConnections(self):
+        test = [1,2]
+        result = permutation.is_valid_hami_cycle(test,3,11)
+        self.assertFalse(result)
 if __name__ == '__main__':
     unittest.main()
