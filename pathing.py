@@ -1,6 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
+import heapq
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -151,4 +152,39 @@ def bfsToTarget(graph, currentNode, targetNode):
     return None
 
 def get_dijkstra_path():
-    return [1,2]
+    a = global_game_data.current_graph_index
+    end = len(graph_data.graph_data[a])-1
+    return dijkstrasToTarget(a,0,global_game_data.target_node[a])
+
+    
+
+def dijkstrasToTarget(graphIndex,start,target):
+    distances=[0]
+    for i in range (len(graph_data.graph_data[graphIndex])):
+         distances.append(float('infinity'))
+    
+    unvisited = distances.copy()
+    
+    while unvisited:
+        current_node = min(unvisited, key=unvisited.get)
+        current_distance = unvisited[current_node]
+        
+        if current_distance == float('infinity'):
+            break
+        
+        #this is what needs work
+        #I'm not sure what to do because im pretty sure the graph is unweighted unless I am crazy
+        for neighbor in graph_data.graph_data[graphIndex][current_node][1]:
+            edge = (current_node, neighbor)
+            #need to get the weights?
+            weight = weights.get(edge, float('infinity'))
+            
+            distance = current_distance + weight
+            
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                unvisited[neighbor] = distance 
+        
+        unvisited.pop(current_node)
+    
+    return distances
