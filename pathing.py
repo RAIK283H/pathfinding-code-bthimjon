@@ -1,6 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
+import numpy as np
 import heapq
 
 def set_current_graph_paths():
@@ -164,9 +165,14 @@ def dijkstrasToTarget(graphIndex,start,target):
          distances.append(float('infinity'))
     
     unvisited = distances.copy()
-    
+    print(unvisited)
+
+    #while priority queue isn't empty
     while unvisited:
-        current_node = min(unvisited, key=unvisited.get)
+        #min is a dictionary? idk where it is coming from
+        #dequeue item with the smallest cost that is current_node
+        current_node = np.argmin(unvisited)
+        unvisited.remove(current_node)
         current_distance = unvisited[current_node]
         
         if current_distance == float('infinity'):
