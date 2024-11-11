@@ -131,6 +131,7 @@ def get_bfs_path():
 
 def bfsToTarget(graph, currentNode, targetNode):
     queue = [(currentNode, [currentNode])]
+    print(queue)
     visited = set()
     
     while queue:
@@ -155,42 +156,40 @@ def bfsToTarget(graph, currentNode, targetNode):
 def get_dijkstra_path():
     a = global_game_data.current_graph_index
     end = len(graph_data.graph_data[a])-1
-    return dijkstrasToTarget(a,0,global_game_data.target_node[a])
+    #return dijkstrasToTarget(a,0,global_game_data.target_node[a])
 
     
 
-def dijkstrasToTarget(graphIndex,start,target):
-    distances=[0]
+def dijkstrasToTarget(graphIndex,currentNode,targetNode):
+    distances = 0
+    path = []
     for i in range (len(graph_data.graph_data[graphIndex])):
-         distances.append(float('infinity'))
-    
+        distances.append(float("infinity"))
     unvisited = distances.copy()
-    print(unvisited)
-
-    #while priority queue isn't empty
-    while unvisited:
-        #min is a dictionary? idk where it is coming from
-        #dequeue item with the smallest cost that is current_node
-        current_node = np.argmin(unvisited)
-        unvisited.remove(current_node)
-        current_distance = unvisited[current_node]
-        
-        if current_distance == float('infinity'):
-            break
-        
-        #this is what needs work
-        #I'm not sure what to do because im pretty sure the graph is unweighted unless I am crazy
-        for neighbor in graph_data.graph_data[graphIndex][current_node][1]:
-            edge = (current_node, neighbor)
-            #need to get the weights?
-            weight = weights.get(edge, float('infinity'))
-            
-            distance = current_distance + weight
-            
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                unvisited[neighbor] = distance 
-        
-        unvisited.pop(current_node)
+    unvisited.pop(0)
+    queue = 0
+    visited = set()
     
-    return distances
+    while queue:
+        currentNode = np.argmin(queue)
+        print(currentNode)
+        path.append(currentNode)
+        queue.pop(currentNode)
+        
+        
+        #if target node is found, return the path
+        if currentNode == targetNode:
+            return path
+        
+        #if node is not visited, explore its neighbors
+        if currentNode not in visited:
+            visited.add(currentNode)
+            
+            #go to all the neighbors of the current node
+            for i in range (graph_data.graph_data[graphIndex][currentNode][1]):
+                if graph_data.graph_data[graphIndex][i] not in visited:
+                    distances[i] = min(distances[i], distances[currentNode] + edge_weight)
+                    queue.append(i)
+    
+    #if target node is not found
+    return None
