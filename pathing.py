@@ -156,22 +156,28 @@ def get_dijkstra_path():
     a = global_game_data.current_graph_index
     end = len(graph_data.graph_data[a])-1
 
-     #gets the path to the target node and checks if the target is in the path
+    #gets the path to the target node and checks if the target is in the path
     path = dijkstrasToTarget(a, 0 ,global_game_data.target_node[a])
-    #assert global_game_data.target_node[a] in path, "The path does not include the target node"
+    assert global_game_data.target_node[a] in path, "The path does not include the target node"
 
     #gets the path to the end node and checks
     result = dijkstrasToTarget(a, global_game_data.target_node[a], end)
     for i in range(1,len(result)):
         path.append(result[i])
-    #assert end in path, "The path does not include the exit node"
-    print(path)
+
+    #assertions
+    assert end in path, "The path does not include the exit node"
+    assert path[0] == 0, "The path does not begin with the start node"
+    assert path[len(path)-1]== end, "The path does not end with the exit node"
+    for i in range (len(path)-1):
+        assert path[i+1] in graph_data.graph_data[global_game_data.current_graph_index][path[i]][1], "The next node is not in the adjacency list for the previous node"
     return path
 
 
     
 
 def dijkstrasToTarget(graphIndex,startNode,targetNode):
+    #sets the distances for all the nodes, the distance to the start node is 0
     distances = [0]
     for node in graph_data.graph_data[graphIndex]:
         distances.append(float('infinity'))
@@ -179,11 +185,14 @@ def dijkstrasToTarget(graphIndex,startNode,targetNode):
     queue = [(0, startNode)]
     visited = set()
     
+    #while the queue isn't empty
     while queue:
         current_distance, currentNode = heapq.heappop(queue)
 
+        #checks if the target node is the current node
         if currentNode == targetNode:
             path = []
+            #appends and returns the path to the target node
             while currentNode is not None:
                 path.append(currentNode)
                 currentNode = previous[currentNode]
@@ -195,18 +204,23 @@ def dijkstrasToTarget(graphIndex,startNode,targetNode):
         visited.add(currentNode)
 
         adjacencyList = graph_data.graph_data[graphIndex][currentNode][1]
+        #checks every neighbor in the adjacency list
         for neighbor in adjacencyList:
             if neighbor not in visited:
+                #adds the distance to the neighbor node to the current node
                 new_distance = current_distance + distanceSolver(currentNode, neighbor)
 
+                #if the new distance is shorter than the current distance
                 if new_distance < distances[neighbor]:
                     distances[neighbor] = new_distance
                     previous[neighbor] = currentNode 
                     heapq.heappush(queue, (new_distance, neighbor))
     
+    #return none if the target node isn't found
     return None
 
 
+#solves for the distance between the current and target node
 def distanceSolver(currentNode, targetNode):
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     return math.sqrt((graph[targetNode][0][0] - graph[currentNode][0][0])**2 + (graph[targetNode][0][1] - graph[currentNode][0][1])**2)

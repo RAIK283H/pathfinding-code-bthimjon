@@ -11,3 +11,6 @@ then the path is returned
 
 In scoreboard I added the time it takes for the player to move to each individual node
 This allows players to see how long in real time it takes for the player to travel between nodes
+
+
+I used heapq to implement my priority queue for extra credit. 
