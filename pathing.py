@@ -1,7 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
-import numpy as np
+import math
 import heapq
 
 def set_current_graph_paths():
@@ -197,8 +197,7 @@ def dijkstrasToTarget(graphIndex,startNode,targetNode):
         adjacencyList = graph_data.graph_data[graphIndex][currentNode][1]
         for neighbor in adjacencyList:
             if neighbor not in visited:
-                edge_weight = graph_data.weights[graphIndex].get((currentNode, neighbor), float("infinity"))
-                new_distance = current_distance + edge_weight
+                new_distance = current_distance + distanceSolver(currentNode, neighbor)
 
                 if new_distance < distances[neighbor]:
                     distances[neighbor] = new_distance
@@ -206,3 +205,8 @@ def dijkstrasToTarget(graphIndex,startNode,targetNode):
                     heapq.heappush(queue, (new_distance, neighbor))
     
     return None
+
+
+def distanceSolver(currentNode, targetNode):
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    return math.sqrt((graph[targetNode][0][0] - graph[currentNode][0][0])**2 + (graph[targetNode][0][1] - graph[currentNode][0][1])**2)
