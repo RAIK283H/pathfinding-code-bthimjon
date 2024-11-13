@@ -131,7 +131,6 @@ def get_bfs_path():
 
 def bfsToTarget(graph, currentNode, targetNode):
     queue = [(currentNode, [currentNode])]
-    print(queue)
     visited = set()
     
     while queue:
@@ -156,40 +155,41 @@ def bfsToTarget(graph, currentNode, targetNode):
 def get_dijkstra_path():
     a = global_game_data.current_graph_index
     end = len(graph_data.graph_data[a])-1
-    #return dijkstrasToTarget(a,0,global_game_data.target_node[a])
+
+     #gets the path to the target node and checks if the target is in the path
+    path = dijkstrasToTarget(a, 0 ,global_game_data.target_node[a])
+    #assert global_game_data.target_node[a] in path, "The path does not include the target node"
+
+    #gets the path to the end node and checks
+    result = dijkstrasToTarget(a, global_game_data.target_node[a], end)
+    #for i in range(1,len(result)):
+        #path.append(result[i])
+    #assert end in path, "The path does not include the exit node"
+    print(path)
+    return path
+
 
     
 
-def dijkstrasToTarget(graphIndex,currentNode,targetNode):
-    distances = 0
+def dijkstrasToTarget(graphIndex,startNode,targetNode):
+    distances = [0]
     path = []
+    queue = [(0, startNode)]
     for i in range (len(graph_data.graph_data[graphIndex])):
         distances.append(float("infinity"))
-    unvisited = distances.copy()
-    unvisited.pop(0)
-    queue = 0
+    queue = set([0])
     visited = set()
     
     while queue:
-        currentNode = np.argmin(queue)
-        print(currentNode)
-        path.append(currentNode)
-        queue.pop(currentNode)
-        
-        
-        #if target node is found, return the path
-        if currentNode == targetNode:
-            return path
-        
-        #if node is not visited, explore its neighbors
-        if currentNode not in visited:
-            visited.add(currentNode)
-            
-            #go to all the neighbors of the current node
-            for i in range (graph_data.graph_data[graphIndex][currentNode][1]):
-                if graph_data.graph_data[graphIndex][i] not in visited:
-                    distances[i] = min(distances[i], distances[currentNode] + edge_weight)
-                    queue.append(i)
+        current_distance, currentNode = heapq.heappop(queue)
+
+        if current_distance>distances[currentNode]:
+            continue
+
+        for i in range (len(graph_data.graph_data[graphIndex][currentNode][1])):
+            adjacencyList = graph_data.graph_data[graphIndex][currentNode][1]
+            if adjacencyList[i] not in visited:
+                newDistance = current_distance + graph_data.weights[graphIndex].get((currentNode,adjacencyList[i]),None)
+                heapq.heappush(queue,(newDistance,adjacencyList[i]))
     
-    #if target node is not found
-    return None
+    return distances
