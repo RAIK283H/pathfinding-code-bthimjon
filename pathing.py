@@ -162,8 +162,8 @@ def get_dijkstra_path():
 
     #gets the path to the end node and checks
     result = dijkstrasToTarget(a, global_game_data.target_node[a], end)
-    #for i in range(1,len(result)):
-        #path.append(result[i])
+    for i in range(1,len(result)):
+        path.append(result[i])
     #assert end in path, "The path does not include the exit node"
     print(path)
     return path
@@ -173,23 +173,36 @@ def get_dijkstra_path():
 
 def dijkstrasToTarget(graphIndex,startNode,targetNode):
     distances = [0]
-    path = []
+    for node in graph_data.graph_data[graphIndex]:
+        distances.append(float('infinity'))
+    previous = {startNode: None}
     queue = [(0, startNode)]
-    for i in range (len(graph_data.graph_data[graphIndex])):
-        distances.append(float("infinity"))
-    queue = set([0])
     visited = set()
     
     while queue:
         current_distance, currentNode = heapq.heappop(queue)
 
-        if current_distance>distances[currentNode]:
+        if currentNode == targetNode:
+            path = []
+            while currentNode is not None:
+                path.append(currentNode)
+                currentNode = previous[currentNode]
+            return path[::-1]
+        
+        if current_distance > distances[currentNode]:
             continue
 
-        for i in range (len(graph_data.graph_data[graphIndex][currentNode][1])):
-            adjacencyList = graph_data.graph_data[graphIndex][currentNode][1]
-            if adjacencyList[i] not in visited:
-                newDistance = current_distance + graph_data.weights[graphIndex].get((currentNode,adjacencyList[i]),None)
-                heapq.heappush(queue,(newDistance,adjacencyList[i]))
+        visited.add(currentNode)
+
+        adjacencyList = graph_data.graph_data[graphIndex][currentNode][1]
+        for neighbor in adjacencyList:
+            if neighbor not in visited:
+                edge_weight = graph_data.weights[graphIndex].get((currentNode, neighbor), float("infinity"))
+                new_distance = current_distance + edge_weight
+
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    previous[neighbor] = currentNode 
+                    heapq.heappush(queue, (new_distance, neighbor))
     
-    return distances
+    return None
