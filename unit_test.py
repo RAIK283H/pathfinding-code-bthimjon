@@ -4,6 +4,7 @@ import graph_data
 import pathing
 import permutation
 from itertools import permutations
+import global_game_data
 
 
 class TestPathFinding(unittest.TestCase):
@@ -64,5 +65,11 @@ class TestPathFinding(unittest.TestCase):
         test = [1,2]
         result = permutation.is_valid_hami_cycle(test,3,11)
         self.assertFalse(result)
+
+    def test_DijkstrasToTarget(self):
+        end = len(graph_data.graph_data[0])-1
+        path = pathing.dijkstrasToTarget(0,0,end)
+        result = path[len(path)-1]
+        self.assertEqual(end,result)
 if __name__ == '__main__':
     unittest.main()
