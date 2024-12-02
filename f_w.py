@@ -37,17 +37,17 @@ def floyd_warshall(dist, parent):
 
 
 def FloydWarshallPath(P, i, j):
-    path = []
-    z = P[i][j]
-    while z is not None: 
-        path.insert(0,z)
-        z = P[i][z]
-    path.insert(0,i)
-    path.append(j)
+    if P[i][j] is None:
+        return None
+
+    path = [j]
+    while j != i:
+        j = P[i][j]
+        if j is None:
+            return None
+        path.insert(0, j)
     return path
 
-
-# Example Usage
 index = global_game_data.current_graph_index
 graph = graph_data.graph_data[index]
 dist, parent = adjacency_list_to_matrix()
@@ -55,7 +55,7 @@ floyd_warshall(dist, parent)
 
 for row in dist:
     print(row)
-    
+        
 path = FloydWarshallPath(parent, 0, len(graph)-1)
 print("The shortest path: ")
 print(path if path else "No path exists")
