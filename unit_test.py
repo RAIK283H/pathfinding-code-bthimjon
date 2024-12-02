@@ -5,6 +5,7 @@ import pathing
 import permutation
 from itertools import permutations
 import global_game_data
+import f_w
 
 
 class TestPathFinding(unittest.TestCase):
@@ -71,5 +72,21 @@ class TestPathFinding(unittest.TestCase):
         path = pathing.dijkstrasToTarget(0,0,end)
         result = path[len(path)-1]
         self.assertEqual(end,result)
+
+    def test_FloydWarshallPath(self):
+        parent = [[0, 0, 1], [1, 1, 1], [1, 2, 2]]
+        resultPath = f_w.FloydWarshallPath(parent,0,2)
+        expectedPath = [0,1,2]
+        self.assertEqual(resultPath,expectedPath," Did not result in the correct path")
+
+    def test_FloydWarshallPathNew(self):
+        parent = [[0, 0, 1, 2], [1, 1, 1, 2], [1, 2, 2, 2], [1, 2, 3, 3]]
+        resultPath = f_w.FloydWarshallPath(parent,0,3)
+        expectedPath = [0,1,2,3]
+        self.assertEqual(resultPath,expectedPath," Did not result in the correct path")
+
+ 
+
+
 if __name__ == '__main__':
     unittest.main()
