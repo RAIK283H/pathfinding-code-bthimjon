@@ -3,7 +3,7 @@ import global_game_data
 import graph_data
 import main
 
-
+#finds the weight 
 def distanceSolver(currentNode, targetNode, index):
     graph = graph_data.graph_data[index]
     return math.sqrt((graph[targetNode][0][0] - graph[currentNode][0][0])**2 + (graph[targetNode][0][1] - graph[currentNode][0][1])**2)
@@ -25,7 +25,7 @@ def adjacency_list_to_matrix(index):
 
     return dist, parent
 
-
+#function that runs floyd-warshall
 def floyd_warshall(dist):
     for k in range(len(dist)):
         for i in range(len(dist)):
@@ -35,6 +35,7 @@ def floyd_warshall(dist):
                     parent[i][j] = parent[k][j]
 
 
+#creates the path back
 def FloydWarshallPath(P, i, j):
     if P[i][j] is None:
         return None
