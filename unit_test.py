@@ -73,17 +73,27 @@ class TestPathFinding(unittest.TestCase):
         result = path[len(path)-1]
         self.assertEqual(end,result)
 
-    def test_FloydWarshallPath(self):
+    def test_FloydWarshallPathSmallGraph(self):
         parent = [[0, 0, 1], [1, 1, 1], [1, 2, 2]]
         resultPath = f_w.FloydWarshallPath(parent,0,2)
         expectedPath = [0,1,2]
-        self.assertEqual(resultPath,expectedPath," Did not result in the correct path")
+        self.assertEqual(resultPath,expectedPath," Did not result in the correct path for a small graph")
 
-    def test_FloydWarshallPathNew(self):
+    def test_FloydWarshallPathBigGraph(self):
         parent = [[0, 0, 1, 2], [1, 1, 1, 2], [1, 2, 2, 2], [1, 2, 3, 3]]
         resultPath = f_w.FloydWarshallPath(parent,0,3)
         expectedPath = [0,1,2,3]
-        self.assertEqual(resultPath,expectedPath," Did not result in the correct path")
+        self.assertEqual(resultPath,expectedPath," Did not result in the correct path for a big graph")
+    def test_FloydWarshallPathEmpty(self):
+        parent = [[None,None,None], [None,None,None], [None, None, None]]
+        resultPath = f_w.FloydWarshallPath(parent,0,2)
+        expectedPath = None
+        self.assertEqual(resultPath, expectedPath, "Did not result in the correct path for an empty graph")
+    def test_FloydWarshallPathOneNode(self):
+        parent = [[0]]
+        resultPath = f_w.FloydWarshallPath(parent,0,0)
+        expectedPath = [0]
+        self.assertEqual(resultPath, expectedPath, "Did not result in the correct path for a graph with one node")
 
  
 
